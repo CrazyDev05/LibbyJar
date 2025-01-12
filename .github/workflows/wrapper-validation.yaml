@@ -6,4 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: Gradle Permission
+        run: chmod +x ./gradlew
+
       - uses: gradle/wrapper-validation-action@v1.1.0
