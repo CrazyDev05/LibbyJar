@@ -88,7 +88,7 @@ gradlePlugin {
         create("libbyjar") {
             id = "de.crazydev22.libbyjar"
             displayName = "LibbyJar"
-            description = "JVM Runtime Dependency Management."
+            description = "Libby Configuration Generator."
             implementationClass = "de.crazydev22.libbyjar.LibbyJarPlugin"
             tags.set(listOf("runtime dependency", "relocation"))
         }
