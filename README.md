@@ -40,10 +40,13 @@ dependencies {
 
 libbyJar { 
     relocate("a.b.c", "m.n.o")
-    packageName = "de.crazydev22.libbyjar"
-    className = "Libraries"
-    
-    type = "paper"
-    version = "1.3.1"
+    packageName = "de.crazydev22.libbyjar" //The package of the generated libraries class
+    className = "Libraries" //The name of the generated libraries class
+    checksum = true //Whether to generate checksums or not
+
+    repository = "https://repo.alessiodp.com/releases/" //The Repository to get libby from
+    type = "paper" //The libby environment to use (defaults to core)
+    version = "1.3.1" //The libby version to use
+    config = "implementation" //The gradle configuration to add libby to
 }
 ```
