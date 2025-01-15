@@ -8,6 +8,7 @@ import org.gradle.api.artifacts.Configuration
 import org.gradle.kotlin.dsl.maven
 import java.io.File
 import java.security.MessageDigest
+import java.util.Base64
 
 internal fun Project.addRepository(ext: LibbyJarExtension) {
     repositories.maven(ext.repository)
@@ -24,7 +25,7 @@ internal fun File.checksum(algorithm: String = "SHA-256", bufferSize: Int = 4096
 }
 
 internal fun MessageDigest.toHex(): String = digest().toHex()
-internal fun ByteArray.toHex() = fold(StringBuilder()) { sb, it -> sb.append("%02x".format(it)) }.toString()
+internal fun ByteArray.toHex() = Base64.getEncoder().encodeToString(this)
 
 internal fun File.createDirectory(): File {
     if (!exists()) mkdirs()
