@@ -18,14 +18,11 @@ internal fun Project.addDependency(ext: LibbyJarExtension) {
     dependencies.add(ext.config.get(), "net.byteflux:libby-${ext.type.get()}:${ext.version.get()}")
 }
 
-internal fun File.checksum(algorithm: String = "SHA-256", bufferSize: Int = 4096): String {
-    val md = MessageDigest.getInstance(algorithm)
-    forEachBlock(bufferSize) { buffer, bytesRead -> md.update(buffer, 0, bytesRead) }
-    return md.toHex()
+internal fun File.checksum(algorithm: String = "SHA-256"): String {
+    return MessageDigest.getInstance(algorithm).digest(readBytes()).toBase64()
 }
 
-internal fun MessageDigest.toHex(): String = digest().toHex()
-internal fun ByteArray.toHex() = Base64.getEncoder().encodeToString(this)
+internal fun ByteArray.toBase64() = Base64.getEncoder().encodeToString(this)
 
 internal fun File.createDirectory(): File {
     if (!exists()) mkdirs()

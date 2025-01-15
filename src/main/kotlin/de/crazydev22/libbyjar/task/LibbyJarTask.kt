@@ -114,12 +114,15 @@ public abstract class LibbyJarTask @Inject constructor(
     private fun String.sha256(): String? {
         if (!extension.checksum.get() || count { it == ':' } == 3)
             return null
-        return project.configurations
-            .detachedConfiguration(project.dependencyFactory.create(this))
-            .setTransitive(false)
-            .resolve()
-            .firstOrNull()
-            ?.checksum()
+
+        return try {
+            project.configurations
+                .detachedConfiguration(project.dependencyFactory.create("$this@jar"))
+                .setTransitive(false)
+                .resolve()
+                .firstOrNull()
+                ?.checksum()
+        } catch (_: Throwable) { "error" }
     }
 
     private fun RepositoryHandler.getMavenRepos() = this.filterIsInstance<MavenArtifactRepository>()
@@ -131,6 +134,7 @@ public abstract class LibbyJarTask @Inject constructor(
         RenderableModuleResult(this.resolutionResult.root).children
             .mapNotNull { it.toLibbyDependency() }
             .filterNot { it.artifactId.endsWith("-bom") }
+            .filterNot { it.sha256 == "error" }
 
     protected open fun withShadowTask(
         action: ShadowJar.() -> Unit
