@@ -7,6 +7,9 @@
     <a href="https://github.com/CrazyDev05/libbyjar/actions/workflows/gradle.yml">
         <img src="https://github.com/CrazyDev05/libbyjar/actions/workflows/gradle.yml/badge.svg">
     </a>
+    <a href="https://plugins.gradle.org/plugin/de.crazydev22.libbyjar">
+        <img src="https://img.shields.io/gradle-plugin-portal/v/de.crazydev22.libbyjar">
+    </a>
   </div>
 
 <hr>
