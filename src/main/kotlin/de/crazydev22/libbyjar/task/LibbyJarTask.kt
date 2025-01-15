@@ -111,15 +111,15 @@ public abstract class LibbyJarTask @Inject constructor(
         return Dependency::class.java.constructors.first().newInstance(*array) as Dependency
     }
 
-    private fun String.sha256(): String {
-        if (count { it == ':' } == 3)
-            return substring(0, lastIndexOf(':'))
+    private fun String.sha256(): String? {
+        if (!extension.checksum.get() || count { it == ':' } == 3)
+            return null
         return project.configurations
             .detachedConfiguration(project.dependencyFactory.create(this))
             .setTransitive(false)
             .resolve()
             .firstOrNull()
-            ?.checksum() ?: ""
+            ?.checksum()
     }
 
     private fun RepositoryHandler.getMavenRepos() = this.filterIsInstance<MavenArtifactRepository>()

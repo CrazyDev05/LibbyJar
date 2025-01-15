@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "de.crazydev22"
-version = "1.0.1"
+version = "1.0.2"
 
 repositories {
     mavenCentral()
