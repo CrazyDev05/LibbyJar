@@ -32,7 +32,7 @@ Libraries.load(new PaperLibraryManager(plugin));
 ```kotlin
 plugins { 
     id("com.gradleup.shadow") version "8.3.5"
-    id("de.crazydev22.libbyjar") version "1.0.3"
+    id("de.crazydev22.libbyjar") version "1.0.4"
 }
 dependencies { 
     libby("group.id:artifact.id:version")

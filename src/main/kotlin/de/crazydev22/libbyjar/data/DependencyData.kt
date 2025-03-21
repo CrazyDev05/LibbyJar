@@ -21,7 +21,7 @@ import net.byteflux.libby.relocation.Relocation;
 import java.util.List;
 
 public final class $className {
-    public static final List<String> REPOSITORIES = ${repositories.toValue { it.escaped() }};
+    public static final List<String> REPOSITORIES = unescape(${repositories.toValue { it.escaped() }});
     public static final List<Relocation> RELOCATIONS = ${relocations.toValue { it.toValue() }};
     public static final List<Library> LIBRARIES = ${dependencies.toValue()};
 
@@ -38,10 +38,11 @@ public final class $className {
     }
 
     private static Relocation relocation(String pattern, String relocatedPattern, List<String> includes, List<String> excludes) {
-        return new Relocation(pattern, relocatedPattern, includes, excludes);
+        return new Relocation(unescape(pattern), unescape(relocatedPattern), unescape(includes), unescape(excludes));
     }
 
     private static Library library(String groupId, String artifactId, String version, String sha256) {
+        groupId = unescape(groupId);
         Library.Builder builder = Library.builder()
                 .id(groupId + ":" + artifactId + ":" + version)
                 .groupId(groupId)
@@ -52,12 +53,20 @@ public final class $className {
         RELOCATIONS.forEach(builder::relocate);
         return builder.build();
     }
+    
+    private static List<String> unescape(List<String> raw) {
+        return raw.stream().map($className::unescape).toList();
+    }
+    
+    private static String unescape(String raw) {
+        return raw.replace("{}", ".").replace("{/}", "/");
+    }
 }"""
     }
 
-    private fun String.escaped(): String {
-        return "\"${this}\""
-    }
+    private fun String.escaped(replace: Boolean = true): String =
+        if (replace) "\"${replace(".", "{}").replace("/", "{/}")}\""
+        else "\"${this}\""
 
     private fun <T> Collection<T>.toValue(transform: (T) -> String): String {
         return this.joinToString(prefix = "List.of(", postfix = ")", separator = ", ", transform = transform)
@@ -78,7 +87,7 @@ public final class $className {
         }
 
         return flat.stream()
-            .map { "library(${it.groupId.escaped()}, ${it.artifactId.escaped()}, ${it.version.escaped()}, ${it.sha256?.escaped()})" }
+            .map { "library(${it.groupId.escaped()}, ${it.artifactId.escaped(false)}, ${it.version.escaped(false)}, ${it.sha256?.escaped(false)})" }
             .collect(Collectors.joining(", ", "List.of(", ")"))
     }
 }
